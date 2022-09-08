@@ -1,7 +1,7 @@
 package Core.MVP;
 
-import Core.Models.NumComplex;
-import Core.Models.NumRational;
+
+import Core.Models.Num;
 import Core.Operation;
 import Core.OperationWith;
 
@@ -12,6 +12,7 @@ import java.util.List;
 public class Presenter {
     Model model;
     View view;
+    Num result;
     List<String[]> listOp;
 
     public Presenter(View view, Model model) {
@@ -24,7 +25,7 @@ public class Presenter {
         try (FileWriter writer = new FileWriter(path, false)) {
             for (String[] strings : listOp) {
                 for (String value : strings) {
-                    writer.append(String.format("%s ", value));
+                    writer.append(String.format("%s,", value));
                 }
                 writer.append("\n");
             }
@@ -42,7 +43,7 @@ public class Presenter {
             BufferedReader reader = new BufferedReader(fr);
             String fname = reader.readLine();
             while (fname != null) {
-                listOp.add(fname.split(" "));
+                listOp.add(fname.split(","));
                 fname = reader.readLine();
             }
             reader.close();
@@ -51,21 +52,53 @@ public class Presenter {
             e.printStackTrace();
         }
     }
+    public void printLog(String path) {
+        loadLog(path);
+        for (String[] s :
+                listOp) {
+            for (String a :
+                    s) {
+                System.out.printf("%s ", a);
+            }
+            System.out.println();
+        }
+    }
 
-    public void sum(OperationWith op) {
+
+
+    public void evolution(Operation operation) {
+        System.out.println("¬ведите 1 дл€ работы с комплесными числами или 2 дл€ работы с рациональными:");
+        OperationWith op = OperationWith.convert(view.get());
         if (op.equals(OperationWith.Rational)) {
             double a = view.get("¬ведите a:");
             double b = view.get("¬ведите b:");
             model.setX(a);
             model.setY(b);
-            NumRational result = new NumRational(model.result().getReal());
-            view.print(result, "—умма: ");
+            switch (operation) {
+                case Sum -> {
+                     result = new Num(model.sum(op).getReal());
+
+                }
+                case Divide -> {
+                     result = new Num(model.div(op).getReal());
+
+                }
+                case Sub -> {
+                     result = new Num(model.sub(op).getReal());
+
+                }
+                case Multi -> {
+                     result = new Num(model.mult(op).getReal());
+
+                }
+            }
+            view.print(result, (operation) + ": ");
             listOp.add(new String[]
                     {
                             op.toString(),
-                            Operation.Sum.toString(),
                             String.valueOf(a),
                             String.valueOf(b),
+                            operation.toString(),
                             String.valueOf(result.getReal())});
         } else {
             double a = view.get("¬ведите действительную часть числа a:");
@@ -74,21 +107,42 @@ public class Presenter {
             double bi = view.get("¬ведите мнимую часть числа b:");
             model.setX(a, ai);
             model.setY(b, bi);
-            NumComplex result = new NumComplex(model.result().getReal(), model.result().getImagine());
-            view.print(result, "—умма: ");
+            switch (operation) {
+                case Sum -> {
+                    result = new Num(model.sum(op).getReal(), model.sum(op).getImagine());
+
+                }
+                case Divide -> {
+                    result = new Num(model.div(op).getReal(), model.div(op).getImagine());
+
+                }
+                case Sub -> {
+                    result = new Num(model.sub(op).getReal(), model.sub(op).getImagine());
+
+                }
+                case Multi -> {
+                    result = new Num(model.mult(op).getReal(), model.mult(op).getImagine());
+
+                }
+            }
+            view.print(result, (operation) + ": ");
             listOp.add(new String[]
                     {
                             op.toString(),
-                            Operation.Sum.toString(),
-                            String.valueOf(a),
-                            String.valueOf(ai),
-                            String.valueOf(b),
-                            String.valueOf(bi),
-                            String.valueOf(result.getReal()),
-                            String.valueOf(result.getImagine())});
+                            String.valueOf(new Num(a,ai)),
+                            String.valueOf(new Num(b,bi)),
+//                            String.valueOf(ai),
+                            operation.toString(),
+//                            String.valueOf(b),
+//                            String.valueOf(bi),
+                            String.valueOf(result)});
+//                            String.valueOf(result.getReal()),
+//                            String.valueOf(result.getImagine())});
         }
     }
 }
+
+
 
 
 

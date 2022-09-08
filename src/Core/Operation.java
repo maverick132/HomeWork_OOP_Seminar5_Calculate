@@ -1,10 +1,10 @@
 package Core;
 
 public enum Operation {
-    Sum ("Сложение"),
-    Sub ("Вычитание"),
-    Divide ("Деление"),
-    Multi("Умножение");
+    Sum ("Сумма"),
+    Sub ("Разность"),
+    Divide ("Частное"),
+    Multi("Произведение");
 
 
 

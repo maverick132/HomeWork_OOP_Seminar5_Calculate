@@ -1,15 +1,13 @@
 package Core.MVP;
 
-import Core.Models.NumComplex;
-import Core.Models.NumRational;
-
-import java.util.Scanner;
+import Core.Models.Num;
 
 public interface View {
-    double get();
+    String get();
     double get(String title);
 
-    void print(NumComplex data, String title);
+    void print(Num data, String title);
 
-    void print(NumRational data, String title);
+
+    void set(String value);
 }

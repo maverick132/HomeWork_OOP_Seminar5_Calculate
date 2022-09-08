@@ -1,31 +1,32 @@
 package UI;
 
 import Core.MVP.View;
-import Core.Models.NumComplex;
-import Core.Models.NumRational;
+import Core.Models.Num;
+
 
 import java.util.Scanner;
 
 public class ConsoleView implements View {
     Scanner in = new Scanner(System.in);
 
-    public double get() {
-        return in.nextDouble();
+    public String get() {
+        return in.next();
     }
     public double get(String title) {
         System.out.printf("%s", title);
         return in.nextDouble();
     }
 
+
     @Override
-    public void print(NumRational data, String title) {
+    public void print(Num data, String title) {
         System.out.printf("%s %s\n", title, data);
 
     }
     @Override
-    public void print(NumComplex data, String title) {
-        System.out.printf("%s %s\n", title, data);
-
+    public void set(String value) {
+        System.out.println(value);
     }
+
 
 }
